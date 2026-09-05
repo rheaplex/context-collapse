@@ -1,0 +1,17 @@
+#+title: Context Collapse
+#+author: Rhea Myers
+
+Social media conversation landscapes.
+
+For "The Stories That We Tell Ourselves Online".
+
+* Running
+
+Open =index.html=. No build step, no server, no dependencies.
+
+* Licence
+
+Code is copyright 2026 Myers Studio, Ltd., and licensed under the GNU GPLv3+ ,
+see [[file:COPYING][COPYING]] .
+
+Generated materials *other than code* are placed under CC0 .

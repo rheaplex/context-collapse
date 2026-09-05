@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>Context Collapse — Stripes</title>
+    <script src="./context-collapse.js"></script>
+  </head>
+  <body>
+    <script>
+      /* 10K Drop's repeating stripe cell, turned to 135 degrees so it runs top left
+         to bottom right: warning tape. The two bands are equal widths, as tape's are.
+         The second colour is the post's own shifted in value, so the texture stays
+         inside one voice — every bubble is taped in its own colour. */
+      ContextCollapse.run({
+        title: "Context Collapse — Stripes",
+        slug: "context-collapse-stripes",
+        fill: {
+          kind: "stripe",
+          shift: -24,
+          cell: 14,
+          element: 7,
+          dir: "se"
+        }
+      });
+    </script>
+  </body>
+</html>

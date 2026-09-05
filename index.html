@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>Context Collapse</title>
+    <style>
+      :root {
+        --void: #0B0C10;
+        --card: #15171F;
+        --line: #242734;
+        --ink: #8F96A3;
+        --hi: #E6E9EF;
+        --dim: #5A6070;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        padding: 0 24px 96px;
+        background: var(--void);
+        color: var(--ink);
+        font-family: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+        font-size: 13px;
+        line-height: 1.65;
+        -webkit-font-smoothing: antialiased;
+      }
+      .wrap { max-width: 1180px; margin: 0 auto; }
+      header { padding: 72px 0 20px; border-bottom: 1px solid var(--line); }
+      h1 {
+        margin: 0 0 18px;
+        font-size: 15px;
+        font-weight: 600;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--hi);
+      }
+      blockquote {
+        margin: 0 0 20px;
+        padding-left: 16px;
+        border-left: 2px solid var(--line);
+        max-width: 62ch;
+      }
+      header p { margin: 0 0 8px; max-width: 74ch; }
+      h2 {
+        margin: 56px 0 4px;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--hi);
+      }
+      h2 + p { margin: 0 0 22px; max-width: 74ch; color: var(--dim); }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+      }
+      a.card {
+        display: block;
+        text-decoration: none;
+        color: inherit;
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        overflow: hidden;
+        transition: border-color 160ms ease, transform 160ms ease;
+      }
+      a.card:hover, a.card:focus-visible {
+        border-color: #4C5468;
+        transform: translateY(-2px);
+        outline: none;
+      }
+      .shot {
+        position: relative;
+        aspect-ratio: 16 / 9;
+        background: #000;
+        border-bottom: 1px solid var(--line);
+      }
+      /* the preview is the piece itself, held on one frame by ?still */
+      .shot iframe {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+        pointer-events: none;
+      }
+      .meta { padding: 12px 14px 14px; }
+      .name {
+        color: var(--hi);
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        font-size: 11px;
+        font-weight: 600;
+      }
+      .note { margin-top: 5px; color: var(--dim); font-size: 12px; }
+      footer {
+        margin-top: 64px;
+        padding-top: 20px;
+        border-top: 1px solid var(--line);
+        color: var(--dim);
+        max-width: 74ch;
+      }
+      kbd {
+        color: var(--hi);
+        background: #1C1F29;
+        border: 1px solid var(--line);
+        border-radius: 4px;
+        padding: 1px 5px;
+        font: inherit;
+      }
+      a.plain { color: var(--ink); }
+      @media (prefers-reduced-motion: reduce) {
+        a.card { transition: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+
+    <header>
+      <h1>Context Collapse</h1>
+      <blockquote>
+        The internet has always produced stories. Today, it produces worlds, conspiracies,
+        fandoms, archives, anonymous identities, platform myths, AI hallucinations, and
+        collective fictions. What stories are we telling? Which stories survive the internet?
+      </blockquote>
+      <p>Sixteen vertical timelines. Posts are speech bubbles of emotive colour. A timeline
+      reacts by quoting a bubble from beside it, redrawing it inside a frame of its own
+      reaction colour. Quotes of quotes nest, and past three rings the innermost surviving
+      reaction becomes the fill — the original colour is gone.</p>
+      <p>One engine, one config per page. Every preview below is the piece itself, held on
+      a single frame, at seed <span style="color:var(--hi)">c0ffee</span>.</p>
+    </header>
+
+    <h2>Palettes</h2>
+    <p>Same rules, different colour. The palette is a config; the mechanics are not.</p>
+    <div class="grid" id="g-pal"></div>
+
+    <h2>Fills</h2>
+    <p>The fill vocabulary is lifted from <em>10K Drop</em>: a soft gradient, and repeating
+    cells holding a spot, a check or a stripe. The second colour is always the post's own
+    shifted in value, so a pattern is a texture within one voice rather than a second voice
+    smuggled in.</p>
+    <div class="grid" id="g-fill"></div>
+
+    <footer>
+      <p><kbd>space</kbd> pause &nbsp; <kbd>r</kbd> reseed &nbsp; <kbd>s</kbd> save a still.
+      The seed lives in the URL fragment, so any frame is reproducible: append
+      <code>#c0ffee</code> to open that one again. Append <code>?still</code> to hold the
+      first frame, as these previews do.</p>
+      <p>Rhea Myers. Seeded, reproducible, no build step.</p>
+      <p>Code copyright 2026 Myers Studio, Ltd., and licensed under the GNU GPLv3+.
+      See <a class="plain" href="./COPYING">COPYING</a>. Generated materials
+      <em>other than code</em> are placed under CC0.</p>
+    </footer>
+
+    </div>
+
+    <script>
+    /* One list, so adding a variant means adding a line here and a page beside it. */
+    const SEED = "c0ffee";
+    const VARIANTS = {
+      "g-pal": [
+        ["flat", "Flat colour", "Seventeen hues evenly round the wheel, and nothing laid over them. The plain reading."],
+        ["primaries",  "Primaries",  "Six hues to start with. Every other colour on the plane has spread there."],
+        ["pastels",    "Pastels",    "Chroma right down, value right up. The spread barely shows."],
+        ["neons",      "Neons",      "Full chroma on near-black. The loudest the rules can be."],
+        ["progress-pride", "Progress Pride", "Daniel Quasar\u2019s 2018 flag, all eleven colours used exactly rather than blended, on a neutral mid grey so black and white both read."],
+        ["phosphors",  "Phosphors",  "Red, blue-screen-of-death blue, and green. Three hues for sixteen timelines, so value has to tell them apart."],
+        ["metallic",   "Metallic",   "Gold through silver. Metal is a colour plus a highlight, so this one needs a ramp."]
+      ],
+      "g-fill": [
+        ["stripes", "Stripes", "Equal bands at 135 degrees, top left to bottom right. Warning tape, in each bubble\u2019s own colour."],
+        ["checks",  "Checks",  "The cell half filled in two quarters, so the two tones weigh the same."],
+        ["dots",    "Dots",    "A disc centred in a larger cell, so the post shows between the dots."],
+        ["ombres",  "Ombres",  "A ramp top left to bottom right, on the axis the tape runs on. Stops at 0.3 and 0.7, so each end holds flat before it turns."]
+      ]
+    };
+
+    for (const id in VARIANTS) {
+      const host = document.getElementById(id);
+      for (const [file, name, note] of VARIANTS[id]) {
+        const a = document.createElement("a");
+        a.className = "card";
+        a.href = file + ".html#" + SEED;
+        const shot = document.createElement("div");
+        shot.className = "shot";
+        const f = document.createElement("iframe");
+        f.setAttribute("loading", "lazy");
+        f.setAttribute("tabindex", "-1");
+        f.setAttribute("aria-hidden", "true");
+        f.setAttribute("scrolling", "no");
+        f.src = file + ".html?still#" + SEED;
+        shot.appendChild(f);
+        const meta = document.createElement("div");
+        meta.className = "meta";
+        meta.innerHTML = '<div class="name"></div><div class="note"></div>';
+        meta.querySelector(".name").textContent = name;
+        meta.querySelector(".note").textContent = note;
+        a.appendChild(shot);
+        a.appendChild(meta);
+        host.appendChild(a);
+      }
+    }
+    </script>
+  </body>
+</html>

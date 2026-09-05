@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>Context Collapse — Primaries</title>
+    <script src="./context-collapse.js"></script>
+  </head>
+  <body>
+    <script>
+      /* Six hues to start with. Every other colour on the plane has spread there:
+         the mixing is the mechanic, not the palette. */
+      ContextCollapse.run({
+        title: "Context Collapse — Primaries",
+        slug: "context-collapse-primaries",
+        palette: {
+          hues: [0, 60, 120, 180, 240, 300],
+          drift: [0.05, 0.5],
+          sat: [96, 100],
+          lit: [44, 56],
+          jitter: {
+            h: 3,
+            s: 3,
+            l: 7
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
