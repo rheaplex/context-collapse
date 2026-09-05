@@ -1,3 +1,4 @@
+// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GNU-GPL-3.0-or-later
 // context-collapse.js - Sixteen timelines quoting each other into collapse.
 // Copyright (C) 2026 Myers Studio, Ltd.
 //
@@ -43,7 +44,7 @@
  * Colour spreads: quoting pulls a timeline's palette toward what it quoted.
  * Reaction flows mostly left to right, one column at a time.
  *
- * The engine is shared; a piece is a config. See the .html files.
+ * The engine is shared; a piece is a config. See the per-variant .js files.
  * ------------------------------------------------------------------ */
 
 (function (global) {
@@ -82,6 +83,9 @@ const PREROLL = 900000;       // ms of feed run before the first frame
 const DEFAULTS = {
   title: "Context Collapse",
   slug: "context-collapse",
+  seed: null,            // a seed baked in: a number, or the hex string you
+                         // would otherwise have put after the # in the URL.
+                         // For a page with no address bar to read one from.
   palette: {
     hues: "spread",      // "spread" round the wheel, or [h, h, h] to cycle
     colours: null,       // or an explicit list of hex strings
@@ -773,6 +777,22 @@ const preroll = (ms) => {
 // The page around the plane.
 ////////////////////////////////////////////////////////////////////////
 
+// Framed: a marketplace token, or a preview on the contact sheet. The address
+// bar is not ours to write to and the click is not ours to take — a viewer has
+// to click the plane to give it focus, and that click would land on the pause.
+// Framed, the piece takes its seed from the config and is left to run.
+const framed = (() => {
+  try { return window.self !== window.top; } catch (e) { return true; }
+})();
+
+// A baked seed, as a number or as the hex you would have typed after the #.
+const bakedSeed = () => {
+  const s = CFG.seed;
+  if (s === null || s === undefined) return undefined;
+  const n = typeof s === "string" ? parseInt(s, 16) : s;
+  return Number.isFinite(n) ? n : undefined;
+};
+
 const CSS =
   '*{box-sizing:border-box}' +
   'body{margin:0;background:#101018;' +          // until the seed is known
@@ -789,8 +809,9 @@ const reseed = (s) => {
   cv.style.background = ground;
   document.body.style.background = ground;   // no black bar around the plane
   // no readout on the plane: the seed lives in the address bar, and nothing
-  // is laid over the work
-  location.hash = seed.toString(16);
+  // is laid over the work. Framed there is no address bar to live in, and
+  // writing one would only push an entry onto the host page's history.
+  if (!framed) location.hash = seed.toString(16);
   draw();          // so a still is painted even while paused
 };
 
@@ -814,7 +835,7 @@ const run = (config) => {
 
   ctx = cv.getContext("2d", { alpha: false });
 
-  addEventListener("keydown", function (e) {
+  if (!framed) addEventListener("keydown", function (e) {
     if (e.key === " ") { e.preventDefault(); paused = !paused; }
     else if (e.key === "r" || e.key === "R") reseed();
     else if (e.key === "s" || e.key === "S") {
@@ -824,13 +845,18 @@ const run = (config) => {
       a.click();
     }
   });
-  addEventListener("pointerdown", function () { paused = !paused; });
+  if (!framed) addEventListener("pointerdown", function () { paused = !paused; });
 
+  // The fragment first, so a seed can still be dealt by hand; then one baked
+  // into the config; then chance.
   const fromHash = parseInt(location.hash.slice(1), 16);
-  reseed(Number.isFinite(fromHash) && location.hash.length > 1 ? fromHash : undefined);
+  const hashed = location.hash.length > 1 && Number.isFinite(fromHash);
+  reseed(hashed ? fromHash : bakedSeed());
   requestAnimationFrame(frame);
 };
 
 global.ContextCollapse = { run: run };
 
 })(typeof window !== "undefined" ? window : this);
+
+// @license-end

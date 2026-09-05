@@ -7,11 +7,24 @@ For "The Stories That We Tell Ourselves Online".
 
 * Running
 
-Open =index.html=. No build step, no server, no dependencies.
+Open =src/index.html=. No build step, no server, no dependencies.
+
+* Packaging
+
+=make= writes an objkt interactive token per variant into =build/=: a =flat/=
+directory holding =index.html= and its scripts under =js/=, beside a =flat.zip= of
+the same. =make check= verifies what objkt requires — index.html at
+the top of the ZIP, every reference relative, no external requests. Needs GNU make.
+
+This is packaging, not building. Nothing is compiled, minified or transformed;
+=src/= still opens from =file://= exactly as it did.
 
 * Licence
 
 Code is copyright 2026 Myers Studio, Ltd., and licensed under the GNU GPLv3+ ,
 see [[file:COPYING][COPYING]] .
+
+Every JavaScript file is tagged for [[https://www.gnu.org/software/librejs/][GNU LibreJS]], so the scripts announce
+themselves as free where it counts: in the browser, at the point of running.
 
 Generated materials *other than code* are placed under CC0 .
