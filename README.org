@@ -21,10 +21,10 @@ This is packaging, not building. Nothing is compiled, minified or transformed;
 
 * Licence
 
-Code is copyright 2026 Myers Studio, Ltd., and licensed under the GNU GPLv3+ ,
+Code is copyright 2026 Myers Studio, Ltd., and hereby licensed under the GNU GPLv3+ ,
 see [[file:COPYING][COPYING]] .
 
 Every JavaScript file is tagged for [[https://www.gnu.org/software/librejs/][GNU LibreJS]], so the scripts announce
 themselves as free where it counts: in the browser, at the point of running.
 
-Generated materials *other than code* are placed under CC0 .
+Generated materials *other than code* are hereby placed under Creative Commons Zero v1.0 Universal .
